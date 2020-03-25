@@ -1,3 +1,6 @@
+-- owner: max96at
+-- http://www.computercraft.info/forums2/index.php?/topic/4072-github-repository-downloader/
+
 local tArgs, gUser, gRepo, gPath, gBranch = {...}, nil, nil, "", "master"
 local usage = [[
  github <user> <repo> [path] [remote path] [branch]

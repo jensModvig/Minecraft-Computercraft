@@ -7,7 +7,7 @@
     This script allows interacting with the startup API via the shell.
 ]]
 
-assert(os.loadAPI("apis/startup"))
+assert(os.loadAPI("/apis/startup.lua"))
 
 -------------------------------------------------------------------------------
 -- Commands                                                                  --

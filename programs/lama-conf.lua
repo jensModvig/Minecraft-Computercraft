@@ -7,7 +7,7 @@
     This script allows interacting with the API from the shell.
 ]]
 
-os.loadAPI("apis/lama")
+os.loadAPI("apis/lama.lua")
 
 -------------------------------------------------------------------------------
 -- Commands                                                                  --

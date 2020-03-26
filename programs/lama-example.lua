@@ -16,7 +16,7 @@
 ]]
 
 -- Load the LAMA API.
-os.loadAPI("apis/lama")
+os.loadAPI("apis/lama.lua")
 
 -------------------------------------------------------------------------------
 -- Constants / config                                                        --

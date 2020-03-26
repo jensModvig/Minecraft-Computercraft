@@ -1,4 +1,4 @@
-os.loadAPI("apis/lama")
+os.loadAPI("apis/lama.lua")
 
 -------------------------------------------------------------------------------
 -- General constants.

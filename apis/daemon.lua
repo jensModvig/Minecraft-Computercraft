@@ -23,7 +23,7 @@
     coroutine.restore() function, to avoid recursion.
 ]]
 
-assert(os.loadAPI("apis/logger"))
+assert(os.loadAPI("apis/logger.lua"))
 
 -------------------------------------------------------------------------------
 -- Config                                                                    --

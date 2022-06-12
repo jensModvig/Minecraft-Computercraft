@@ -9,10 +9,9 @@
 -- named arguments override ordered arguments.
 
 local function parse(input, argOrder, defaults, nameOfCommand)
-
     function getUsage()
         local i = 1
-        local usage = "Usage: \n" .. nameOfCommand
+        local usage = "Usage: \n" .. shell.getRunningProgram()
         while argOrder[i] do
             usage = usage .. " <"
             for _, v in pairs(argOrder[i]) do
@@ -76,5 +75,4 @@ local function parse(input, argOrder, defaults, nameOfCommand)
     return output
 end
 
---return { reset = reset, write_center = write_center }
-print(textutils.serialize(parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})))
+return { parse = parse }

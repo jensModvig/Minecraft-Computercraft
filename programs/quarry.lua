@@ -1,18 +1,8 @@
-local arg = { ... }
-local params = {}
+local parser = require("paramParser")
+local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
 
 local startTime = os.epoch("utc")
 local startFuel = turtle.getFuelLevel()
-
--- default values
-params.x = 31
-params.z = 31
-
-for key, value in pairs(arg) do
-    if string.sub(value, 1, 1) == "-" then
-        params[string.sub(value, 2)] = tonumber(arg[key+1])
-    end
-end
 
 local EST_FUEL = 23.1040582726327 -- Moves
 local EST_TIME = 22.6577539021852 -- Seconds

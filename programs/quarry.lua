@@ -1,4 +1,4 @@
-local parser = require("paramParser")
+local parser = require("apis/paramParser")
 local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
 
 local startTime = os.epoch("utc")

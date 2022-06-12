@@ -1,6 +1,6 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
-local gitgetDir = "programs/gitget.lua"
+local gitgetDir = "progs/gitget.lua"
 local function hte()
     if fs.exists(gitgetDir) then
         shell.run(gitgetDir, username, repo)
@@ -19,4 +19,4 @@ else
 end
 
 -- specify where programs are located
-shell.path(".:/programs:/rom/programs:/rom/programs/turtle")
+shell.path(".:/progs:/rom/programs:/rom/programs/turtle")

@@ -19,4 +19,4 @@ else
 end
 
 -- specify where programs are located
-shell.path(".:/programs:/rom/programs:/rom/programs/turtle:")
+shell.path(".:/programs:/rom/programs:/rom/programs/turtle")

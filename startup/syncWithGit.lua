@@ -1,6 +1,6 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
-local gitgetDir = "progs/gitget.lua"
+local gitgetDir = "programs/gitget.lua"
 local function hte()
     if fs.exists(gitgetDir) then
         shell.run(gitgetDir, username, repo)
@@ -17,6 +17,3 @@ if http then
 else
     print("HTTP not enabled. App will not continue.")
 end
-
--- specify where programs are located
-shell.path(".:/progs:/rom/programs:/rom/programs/turtle")

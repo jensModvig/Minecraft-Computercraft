@@ -1,12 +1,13 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
-function hte()
-    if fs.exists(gitget) then
-        shell.run("gitget", username, repo)
+local gitgetDir = "programs/gitget"
+local function hte()
+    if fs.exists(gitgetDir) then
+        shell.run(gitgetDir, username, repo)
     else
         print("GitGet application does not exist. Downloading...")
-        shell.run("pastebin", "get", "W5ZkVYSi", "gitget")
-        shell.run("gitget", username, repo)
+        shell.run("pastebin", "get", "W5ZkVYSi", gitgetDir)
+        shell.run(gitgetDir, username, repo)
     end
     echo("Installed.")
 end

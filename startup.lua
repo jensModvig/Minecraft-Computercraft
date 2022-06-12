@@ -1,7 +1,7 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
 function hte()
-    if fs.exists(gitget)
+    if fs.exists(gitget) then
         shell.run("gitget", username, repo)
     else
         print("GitGet application does not exist. Downloading...")

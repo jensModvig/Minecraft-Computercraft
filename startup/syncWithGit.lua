@@ -17,3 +17,6 @@ if http then
 else
     print("HTTP not enabled. App will not continue.")
 end
+
+-- specify where programs are located
+shell.setDir(".:/programs:/rom/programs:/rom/programs/turtle:")

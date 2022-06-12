@@ -1,6 +1,6 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
-local gitgetDir = "programs/gitget"
+local gitgetDir = "programs/gitget.lua"
 local function hte()
     if fs.exists(gitgetDir) then
         shell.run(gitgetDir, username, repo)
@@ -9,7 +9,7 @@ local function hte()
         shell.run("pastebin", "get", "W5ZkVYSi", gitgetDir)
         shell.run(gitgetDir, username, repo)
     end
-    echo("Installed.")
+    print("Installed.")
 end
 if http then
     print("HTTP enabled. You can continue.")

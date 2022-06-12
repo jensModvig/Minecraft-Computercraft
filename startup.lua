@@ -1,6 +1,6 @@
 local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
-function then()
+function hte()
     if fs.exists(gitget)
         shell.run("gitget", username, repo)
     else

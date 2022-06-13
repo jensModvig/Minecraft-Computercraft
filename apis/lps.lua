@@ -32,7 +32,7 @@ local dir_map = {
     vector.new(0,0,-1) -- west
 }
 
-local lPose = Pose.new()
+local lPose = new()
 
 local function move(ahead, dig, attack, detect, relative)
     while not ahead() do
@@ -87,5 +87,6 @@ local function gotoPose(x, y, z, f)
     face(f)
 end
 
+local parser = require("/apis/paramParser")
 local params = parser.parse({ ... }, {{"x"}, {"y"}, {"z"}, {"f"}}, {})
 gotoPose(params.x, params.y, params.z, params.f)

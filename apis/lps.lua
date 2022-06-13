@@ -1,6 +1,6 @@
 local pose = {
     add = function(self, o)
-        return vector.new(
+        return pose.new(
             self.x + o.x,
             self.y + o.y,
             self.z + o.z
@@ -11,9 +11,9 @@ local pose = {
     end
 }
 local poseMetatable = {
-    __index = vector,
-    __add = vector.add,
-    __tostring = vector.tostring
+    __index = pose,
+    __add = pose.add,
+    __tostring = pose.tostring
 }
 
 function new(x, y, z, f)
@@ -67,10 +67,6 @@ local function face(goal)
   end
 end
 
-function sign(number)
-    return (number > 0 and 1) or (number == 0 and 0) or -1
-end
-
 local function gotoPose(x, y, z, f)
     local LUT = {
         -- action to perform | direction to face
@@ -90,3 +86,6 @@ local function gotoPose(x, y, z, f)
     travelAxis(x - lpose.x, 1)
     face(f)
 end
+
+local params = parser.parse({ ... }, {{"x"}, {"y"}, {"z"}, {"f"}}, {})
+gotoPose(params.x, params.y, params.z, params.f)

@@ -1,6 +1,6 @@
 local pose = {
     add = function(self, o)
-        return pose.new(
+        return new(
             self.x + o.x,
             -- self.y + o.y,
             -- self.z + o.z

@@ -52,16 +52,16 @@ local function down() return move(turtle.down, turtle.digDown, turtle.attackDown
 
 local function turn(action, moduloOffset)
   action()
-  lpose.f = (lpose.f + moduloOffset) % 4 + 1
+  lPose.f = (lPose.f + moduloOffset) % 4 + 1
 end
 local function turnRight() turn(turtle.turnRight, 0) end
 local function turnLeft() turn(turtle.turnLeft, 2) end
 
 local function face(goal)
-  if goal%4+1 == lpose.f then
+  if goal%4+1 == lPose.f then
     turnLeft()
   else
-    for i=1,math.abs(goal-(lpose.f%4)) do
+    for i=1,math.abs(goal-(lPose.f%4)) do
       turnRight()
     end
   end
@@ -70,9 +70,9 @@ end
 local function gotoPose(x, y, z, f)
     local LUT = {
         -- action to perform | direction to face
-        { action = forward, facing = x < lpose.x and 3 or 1 },
-        { action = y < lpose.y and down or up, facing = lpose.f },
-        { action = forward, facing = z < lpose.z and 4 or 2 }
+        { action = forward, facing = x < lPose.x and 3 or 1 },
+        { action = y < lPose.y and down or up, facing = lPose.f },
+        { action = forward, facing = z < lPose.z and 4 or 2 }
     }
     function travelAxis(difference, axis)
         if difference == 0 then return end
@@ -81,9 +81,9 @@ local function gotoPose(x, y, z, f)
             LUT[axis].action()
         end
     end
-    travelAxis(y - lpose.y, 2)
-    travelAxis(z - lpose.z, 3)
-    travelAxis(x - lpose.x, 1)
+    travelAxis(y - lPose.y, 2)
+    travelAxis(z - lPose.z, 3)
+    travelAxis(x - lPose.x, 1)
     face(f)
 end
 

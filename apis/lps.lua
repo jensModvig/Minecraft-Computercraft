@@ -70,9 +70,9 @@ end
 local function gotoPose(x, y, z, f)
     local LUT = {
         -- action to perform | direction to face
-        { action = forward, facing = if x < lpose.x then 3 else 1 end },
-        { action = if y < lpose.y then down else up end, facing = lpose.f },
-        { action = forward, facing = if z < lpose.z then 4 else 2 end }
+        { action = forward, facing = x < lpose.x and 3 or 1 },
+        { action = y < lpose.y and down or up, facing = lpose.f },
+        { action = forward, facing = z < lpose.z and 4 or 2 }
     }
     function travelAxis(difference, axis)
         if difference == 0 then return end

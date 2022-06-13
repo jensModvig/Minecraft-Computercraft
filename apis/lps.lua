@@ -2,13 +2,13 @@ local pose = {
     add = function(self, o)
         return pose.new(
             self.x + o.x,
-            self.y + o.y,
-            self.z + o.z
+            -- self.y + o.y,
+            -- self.z + o.z
         )
-    end,
-    tostring = function(self)
-        return self.x .. "," .. self.y .. "," .. self.z .. "," self.f
     end
+    -- tostring = function(self)
+    --     return self.x .. "," .. self.y .. "," .. self.z .. "," self.f
+    -- end
 }
 local poseMetatable = {
     __index = pose,

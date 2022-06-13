@@ -1,6 +1,6 @@
-local pose = {
+local Pose = {
     add = function(self, o)
-        return pose.new(
+        return Pose.new(
             self.x + o.x,
             self.y + o.y,
             self.z + o.z
@@ -11,9 +11,9 @@ local pose = {
     end
 }
 local poseMetatable = {
-    __index = pose,
-    __add = pose.add,
-    __tostring = pose.tostring
+    __index = Pose,
+    __add = Pose.add,
+    __tostring = Pose.tostring
 }
 
 function new(x, y, z, f)
@@ -32,7 +32,7 @@ local dir_map = {
     vector.new(0,0,-1) -- west
 }
 
-local lPose = pose.new()
+local lPose = Pose.new()
 
 local function move(ahead, dig, attack, detect, relative)
     while not ahead() do

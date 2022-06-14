@@ -1,6 +1,6 @@
 local Pose = {
     add = function(self, o)
-        return Pose.new(
+        return new(
             self.x + o.x,
             self.y + o.y,
             self.z + o.z,
@@ -8,7 +8,7 @@ local Pose = {
         )
     end,
     mul = function(self, n)
-        return Pose.new(
+        return new(
             self.x + n,
             self.y + n,
             self.z + n,

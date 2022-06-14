@@ -2,13 +2,12 @@ local username = "jensModvig"
 local repo = "Minecraft-Computercraft"
 local gitgetDir = "programs/gitget.lua"
 local function iGitget()
-    if fs.exists(gitgetDir) then
-        shell.run(gitgetDir, username, repo)
-    else
+    shell.run("rm", "*")
+    if not fs.exists(gitgetDir) then
         print("GitGet application does not exist. Downloading...")
         shell.run("pastebin", "get", "W5ZkVYSi", gitgetDir)
-        shell.run(gitgetDir, username, repo)
     end
+    shell.run(gitgetDir, username, repo)
 end
 if http then
     iGitget()

@@ -80,9 +80,9 @@ end
 local function gotoPose(x, y, z, f)
     function travelAxis(difference, action, facing)
         if difference == 0 then return end
-        face(LUT[axis].facing)
+        face(facing)
         for i=1,math.abs(difference) do
-            LUT[axis].action()
+            action()
         end
     end
     travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)

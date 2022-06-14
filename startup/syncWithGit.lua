@@ -3,6 +3,7 @@ local repo = "Minecraft-Computercraft"
 local gitgetDir = "programs/gitget.lua"
 local function iGitget()
     shell.run("rm", "*")
+    print("Deleting all")
     if not fs.exists(gitgetDir) then
         print("GitGet application does not exist. Downloading...")
         shell.run("pastebin", "get", "W5ZkVYSi", gitgetDir)

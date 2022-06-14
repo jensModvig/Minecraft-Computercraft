@@ -35,7 +35,7 @@ local function parse(input, argOrder, defaults, nameOfCommand)
     -- 
     while input[i] do
         -- named arguments 
-        if string.sub(input[i], 1, 1) == "-" then
+        if string.sub(input[i], 1, 1) == "-" and tonumber(string.sub(input[i], 2, 2)) ~= nil then
             local arg_name = string.sub(input[i], 2)
             if named_args[arg_name] then
                 error("Argument: \"" .. arg_name .. "\" provided twice.\n" .. getUsage())

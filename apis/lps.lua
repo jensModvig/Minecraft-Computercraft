@@ -3,7 +3,16 @@ local Pose = {
         return Pose.new(
             self.x + o.x,
             self.y + o.y,
-            self.z + o.z
+            self.z + o.z,
+            self.f
+        )
+    end,
+    mul = function(self, n)
+        return Pose.new(
+            self.x + n,
+            self.y + n,
+            self.z + n,
+            self.f
         )
     end,
     tostring = function(self)
@@ -13,6 +22,7 @@ local Pose = {
 local poseMetatable = {
     __index = Pose,
     __add = Pose.add,
+    __mul = Pose.mul,
     __tostring = Pose.tostring
 }
 
@@ -44,7 +54,7 @@ local function move(ahead, dig, attack, detect, relative)
             error("no more fuel")
         end
     end
-    coords = coords:add(dir_map[coords.f]:mul(relative.x)):add(vector.new(0,relative.y,0))
+    lPose = lPose:add(dir_map[lPose.f]:mul(relative.x)):add(vector.new(0,relative.y,0))
 end
 local function forward() return move(turtle.forward, turtle.dig, turtle.attack, turtle.detect, vector.new(1,0,0)) end
 local function up() return move(turtle.up, turtle.digUp, turtle.attackUp, turtle.detectUp, vector.new(0,1,0)) end
@@ -68,22 +78,16 @@ local function face(goal)
 end
 
 local function gotoPose(x, y, z, f)
-    local LUT = {
-        -- action to perform | direction to face
-        { action = forward, facing = x < lPose.x and 3 or 1 },
-        { action = y < lPose.y and down or up, facing = lPose.f },
-        { action = forward, facing = z < lPose.z and 4 or 2 }
-    }
-    function travelAxis(difference, axis)
+    function travelAxis(difference, action, facing)
         if difference == 0 then return end
         face(LUT[axis].facing)
         for i=1,math.abs(difference) do
             LUT[axis].action()
         end
     end
-    travelAxis(y - lPose.y, 2)
-    travelAxis(z - lPose.z, 3)
-    travelAxis(x - lPose.x, 1)
+    travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
+    travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
+    travelAxis(x - lPose.x, forward, x < lPose.x and 3 or 1)
     face(f)
 end
 

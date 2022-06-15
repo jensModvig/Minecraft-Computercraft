@@ -133,9 +133,9 @@ local status, err = pcall(function()--try
         end
       else
         local status, err = pcall(function()--try
-            down()
-            down()
-            down()
+            lps.down()
+            lps.down()
+            lps.down()
         end ) if not status then-- catch
           goHome()
           unload()

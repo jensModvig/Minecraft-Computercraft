@@ -110,7 +110,7 @@ local function mine()
     turtle.digDown()
     unloadIfNecessary()
   end
-  forward()
+  lps.forward()
   unloadIfNecessary()
 end
 
@@ -123,13 +123,13 @@ local status, err = pcall(function()--try
       end
       if i < params.z then
         if mustTurnRight then
-          turnRight()
+          lps.turnRight()
           mine()
-          turnRight()
+          lps.turnRight()
         else
-          turnLeft()
+          lps.turnLeft()
           mine()
-          turnLeft()
+          lps.turnLeft()
         end
       else
         local status, err = pcall(function()--try
@@ -146,9 +146,9 @@ local status, err = pcall(function()--try
           return
         end
         if not mustTurnRight then
-          turnRight()
+          lps.turnRight()
         else
-          turnLeft()
+          lps.turnLeft()
         end
       end
       mustTurnRight = not mustTurnRight

@@ -1,4 +1,6 @@
 local parser = require("/apis/paramParser")
+local lps = require("/apis/lps")
+
 local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
 
 local startTime = os.epoch("utc")
@@ -8,6 +10,8 @@ local EST_FUEL = 23.1040582726327 -- Moves
 local EST_TIME = 22.6577539021852 -- Seconds
 local area = params.x*params.z
 local est_fuel_total = area*EST_FUEL
+
+--- Ender chest auto detection
 
 
 function disp_time(time) -- time in seconds
@@ -49,49 +53,6 @@ BL["minecraft:soul_soil"] = true
 BL["create:limestone"] = true
 BL["create:limestone_cobblestone"] = true
 
-local coords = vector.new(0,0,0)
--- direction north, east, south, west
-local dir = 1 --north
-local dir_map = {
-    vector.new(1,0,0),
-    vector.new(0,0,1),
-    vector.new(-1,0,0),
-    vector.new(0,0,-1)
-}
-
-local function move(ahead, dig, attack, detect, relative)
-    while not ahead() do
-        if detect() and not dig() then
-            error("cant mine block")
-        end
-        attack()
-        if turtle.getFuelLevel() == 0 then
-            error("no more fuel")
-        end
-    end
-    coords = coords:add(dir_map[dir]:mul(relative.x)):add(vector.new(0,relative.y,0))
-end
-local function forward() return move(turtle.forward, turtle.dig, turtle.attack, turtle.detect, vector.new(1,0,0)) end
-local function up() return move(turtle.up, turtle.digUp, turtle.attackUp, turtle.detectUp, vector.new(0,1,0)) end
-local function down() return move(turtle.down, turtle.digDown, turtle.attackDown, turtle.detectDown, vector.new(0,-1,0)) end
-
-local function turn(action, moduloOffset)
-  action()
-  dir = (dir + moduloOffset) % 4 + 1
-end
-local function turnRight() turn(turtle.turnRight, 0) end
-local function turnLeft() turn(turtle.turnLeft, 2) end
-
-local function face(goal)
-  if goal%4+1 == dir then
-    turnLeft()
-  else
-    for i=1,math.abs(goal-(dir%4)) do
-      turnRight()
-    end
-  end
-end
-
 
 local function getEmptySlots()
     local count = 16
@@ -103,42 +64,14 @@ local function getEmptySlots()
     return count
 end
 
-local resumeDir
-local resumeSpot
+local resumePose
+
 local function goHome()
-  resumeSpot = coords
-  resumeDir = dir
-  while coords.y < 0 do
-    up()
-  end
-  if coords.z ~= 0 then
-      face(4)--local West
-      while coords.z > 0 do
-        forward()
-      end
-  end
-  face(3)--local south
-  while coords.x > 0 do
-    forward()
-  end
+  resumePose = lps.getPose()
+  lps.gotoPose(0, 0, 0, 3)
 end
 local function resumeMining()
-  if resumeSpot.x ~= coords.x then
-    face(1)
-    while resumeSpot.x > coords.x do
-      forward()
-    end
-  end
-  if resumeSpot.z ~= coords.z then
-    face(2)
-    while resumeSpot.z > coords.z do
-      forward()
-    end
-  end
-  while resumeSpot.y < coords.y do
-    down()
-  end
-  face(resumeDir)
+  lps.gotoPose(resumePose.x, resumePose.y, resumePose.z, resumePose.f)
 end
 local function unload()
   for i = 1,16 do

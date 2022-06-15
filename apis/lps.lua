@@ -1,48 +1,13 @@
-local Pose = {
-    add = function(self, o)
-        return new(
-            self.x + o.x,
-            self.y + o.y,
-            self.z + o.z,
-            self.f
-        )
-    end,
-    mul = function(self, n)
-        return new(
-            self.x + n,
-            self.y + n,
-            self.z + n,
-            self.f
-        )
-    end,
-    tostring = function(self)
-        return self.x .. "," .. self.y .. "," .. self.z .. "," .. self.f
-    end
-}
-local poseMetatable = {
-    __index = Pose,
-    __add = Pose.add,
-    __mul = Pose.mul,
-    __tostring = Pose.tostring
-}
-
-function new(x, y, z, f)
-    return setmetatable({
-        x = tonumber(x) or 0,
-        y = tonumber(y) or 0,
-        z = tonumber(z) or 0,
-        f = tonumber(f) or 1
-    }, poseMetatable)
-end
+local pose = require("/apis/pose")
 
 local dir_map = {
-    vector.new(1,0,0), -- north
-    vector.new(0,0,1), -- east
-    vector.new(-1,0,0),-- south
-    vector.new(0,0,-1) -- west
+    vector.new(1,0,0), -- north/front
+    vector.new(0,0,1), -- east/right
+    vector.new(-1,0,0),-- south/back
+    vector.new(0,0,-1) -- west/left
 }
 
-local lPose = new()
+local lPose = pose.new()
 
 local function move(ahead, dig, attack, detect, relative)
     while not ahead() do
@@ -90,7 +55,6 @@ local function gotoPose(x, y, z, f)
     travelAxis(x - lPose.x, forward, x < lPose.x and 3 or 1)
     face(f)
 end
+local function getPose() return lPose:copy() end
 
-local parser = require("/apis/paramParser")
-local params = parser.parse({ ... }, {{"x"}, {"y"}, {"z"}, {"f"}}, {})
-gotoPose(params.x, params.y, params.z, params.f)
+return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose}

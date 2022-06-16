@@ -128,8 +128,8 @@ for j=0,-maxDepth,-3 do
         end
     elseif j % 12 == 6 then
         for i=maxZ,0,-1 do
-            lps.gotoPose((i+1)%2*maxX, j, i)
             lps.gotoPose(i%2*maxX, j, i)
+            lps.gotoPose((i+1)%2*maxX, j, i)
         end
     elseif j % 12 == 3 then
         for i=maxX,0,-1 do

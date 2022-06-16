@@ -120,17 +120,17 @@ for j=maxDepth,0,-3 do
             lps.gotoPose(i%2*params.x, j, i)
             lps.gotoPose((i+1)%2*params.x, j, i)
         end
-    else if j % 12 == -3 then
+      else j % 12 == -3 then
         for i=0,params.x-1 do
             lps.gotoPose(i, j, (i+1)%2*params.y)
             lps.gotoPose(i, j, i%2*params.y)
         end
-    else if j % 12 == -6 then
+    else j % 12 == -6 then
         for i=params.y-1,0,-1 do
             lps.gotoPose((i+1)%2*params.x, j, i)
             lps.gotoPose(i%2*params.x, j, i)
         end
-    else if j % 12 == -9 then
+    else j % 12 == -9 then
         for i=params.x-1,0,-1 do
             lps.gotoPose(i, j, i%2*params.y)
             lps.gotoPose(i, j, (i+1)%2*params.y)

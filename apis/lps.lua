@@ -59,6 +59,7 @@ local function gotoPose(x, y, z, f)
     travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
     travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
     if (f) then
+      print("requested a facing", f)
       face(f)
     end
 end

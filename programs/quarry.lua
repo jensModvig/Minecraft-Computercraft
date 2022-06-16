@@ -116,24 +116,24 @@ end
 local maxDepth = 255
 for j=maxDepth,0,-3 do
     if j % 12 == 0 then
-        for i=0,params.y-1 do
+        for i=0,params.z-1 do
             lps.gotoPose(i%2*params.x, j, i)
             lps.gotoPose((i+1)%2*params.x, j, i)
         end
       elseif j % 12 == -3 then
         for i=0,params.x-1 do
-            lps.gotoPose(i, j, (i+1)%2*params.y)
-            lps.gotoPose(i, j, i%2*params.y)
+            lps.gotoPose(i, j, (i+1)%2*params.z)
+            lps.gotoPose(i, j, i%2*params.z)
         end
       elseif j % 12 == -6 then
-        for i=params.y-1,0,-1 do
+        for i=params.z-1,0,-1 do
             lps.gotoPose((i+1)%2*params.x, j, i)
             lps.gotoPose(i%2*params.x, j, i)
         end
       elseif j % 12 == -9 then
         for i=params.x-1,0,-1 do
-            lps.gotoPose(i, j, i%2*params.y)
-            lps.gotoPose(i, j, (i+1)%2*params.y)
+            lps.gotoPose(i, j, i%2*params.z)
+            lps.gotoPose(i, j, (i+1)%2*params.z)
         end
     end
 end

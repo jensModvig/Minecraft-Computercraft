@@ -113,27 +113,49 @@ local function mine()
   lps.forward()
   unloadIfNecessary()
 end
-local maxDepth = 255
-for j=maxDepth,0,-3 do
-    if j % 12 == 0 then
-        for i=0,params.y-1 do
-            lps.gotoPose(i%2*params.x, j, i)
-            lps.gotoPose((i+1)%2*params.x, j, i)
+
+
+local status, err = pcall(function()--try
+  while true do
+    for i = 1, params.z do
+      for j = 2, params.x do
+        mine()
+      end
+      if i < params.z then
+        if mustTurnRight then
+          lps.turnRight()
+          mine()
+          lps.turnRight()
+        else
+          lps.turnLeft()
+          mine()
+          lps.turnLeft()
         end
-    else if j % 12 == -3 then
-        for i=0,params.x-1 do
-            lps.gotoPose(i, j, (i+1)%2*params.y)
-            lps.gotoPose(i, j, i%2*params.y)
+      else
+        local status, err = pcall(function()--try
+            lps.down()
+            lps.down()
+            lps.down()
+        end ) if not status then-- catch
+          goHome()
+          unload()
+          print("we reached bedrock")
+          print("took", os.epoch("utc") - startTime, "milliseconds.")
+          print("and", turtle.getFuelLevel() - startFuel, "fuel.")
+          sleep(10000000)
+          return
         end
-    else if j % 12 == -6 then
-        for i=params.y-1,0,-1 do
-            lps.gotoPose((i+1)%2*params.x, j, i)
-            lps.gotoPose(i%2*params.x, j, i)
+        if not mustTurnRight then
+          lps.turnRight()
+        else
+          lps.turnLeft()
         end
-    else if j % 12 == -9 then
-        for i=params.x-1,0,-1 do
-            lps.gotoPose(i, j, i%2*params.y)
-            lps.gotoPose(i, j, (i+1)%2*params.y)
-        end
+      end
+      mustTurnRight = not mustTurnRight
     end
+  end
+end ) if not status then-- catch
+  goHome()
+  unload()
+  error(err)
 end

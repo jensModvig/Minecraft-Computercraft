@@ -8,8 +8,9 @@ local dir_map = {
 }
 
 local lPose = pose.new()
+local onMoveFunc
 
-local function move(ahead, dig, attack, detect, relative)
+local function move(ahead, dig, attack, detect, relative, onMove)
     while not ahead() do
         if detect() and not dig() then
             error("cant mine block")
@@ -20,6 +21,9 @@ local function move(ahead, dig, attack, detect, relative)
         end
     end
     lPose = lPose:add(dir_map[lPose.f]:mul(relative.x)):add(vector.new(0,relative.y,0))
+    if (onMoveFunc) then
+      onMoveFunc()
+    end
 end
 local function forward() return move(turtle.forward, turtle.dig, turtle.attack, turtle.detect, vector.new(1,0,0)) end
 local function up() return move(turtle.up, turtle.digUp, turtle.attackUp, turtle.detectUp, vector.new(0,1,0)) end
@@ -50,11 +54,23 @@ local function gotoPose(x, y, z, f)
             action()
         end
     end
-    travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
-    travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
     travelAxis(x - lPose.x, forward, x < lPose.x and 3 or 1)
-    face(f)
+    travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
+    travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
+    if (f) then
+      face(f)
+    end
 end
 local function getPose() return lPose:copy() end
+local function regiserOnMove(onMove)
+  onMoveFunc = onMove
+end
+
+local function navigate(waypoints, callback)
+  for _, v in pairs(waypoints) do
+    gotoPose(v.x, v.y, v.z, v.f)
+  end
+  callback()
+end
 
 return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose}

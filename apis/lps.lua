@@ -47,7 +47,7 @@ local function face(goal)
 end
 
 local function gotoPose(x, y, z, f)
-    print("going to:", pose.new(x, y, z, f).tostring())
+    print("going to:", pose.new(x, y, z, f):tostring())
     function travelAxis(difference, action, facing)
         if difference == 0 then return end
         face(facing)

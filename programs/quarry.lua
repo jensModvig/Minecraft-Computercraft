@@ -113,27 +113,28 @@ local function mine()
   lps.forward()
   unloadIfNecessary()
 end
+local maxX, maxZ = params.x-1, params.z-1
 local maxDepth = 255
 for j=0,-maxDepth,-3 do
     if j % 12 == 0 then
-        for i=0,params.z-1 do
-            lps.gotoPose(i%2*params.x, j, i)
-            lps.gotoPose((i+1)%2*params.x, j, i)
+        for i=0,maxZ do
+            lps.gotoPose(i%2*maxX, j, i)
+            lps.gotoPose((i+1)%2*maxX, j, i)
         end
       elseif j % 12 == -3 then
-        for i=0,params.x-1 do
-            lps.gotoPose(i, j, (i+1)%2*params.z)
-            lps.gotoPose(i, j, i%2*params.z)
+        for i=0,maxX-1 do
+            lps.gotoPose(i, j, (i+1)%2*maxZ)
+            lps.gotoPose(i, j, i%2*maxZ)
         end
       elseif j % 12 == -6 then
-        for i=params.z-1,0,-1 do
-            lps.gotoPose((i+1)%2*params.x, j, i)
-            lps.gotoPose(i%2*params.x, j, i)
+        for i=maxZ,0,-1 do
+            lps.gotoPose((i+1)%2*maxX, j, i)
+            lps.gotoPose(i%2*maxX, j, i)
         end
       elseif j % 12 == -9 then
-        for i=params.x-1,0,-1 do
-            lps.gotoPose(i, j, i%2*params.z)
-            lps.gotoPose(i, j, (i+1)%2*params.z)
+        for i=maxX-1,0,-1 do
+            lps.gotoPose(i, j, i%2*maxZ)
+            lps.gotoPose(i, j, (i+1)%2*maxZ)
         end
     end
 end

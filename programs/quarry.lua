@@ -122,7 +122,7 @@ for j=0,-maxDepth,-3 do
             lps.gotoPose((i+1)%2*maxX, j, i)
         end
     elseif j % 12 == 9 then
-        for i=0,maxX-1 do
+        for i=0,maxX do
             lps.gotoPose(i, j, (i+1)%2*maxZ)
             lps.gotoPose(i, j, i%2*maxZ)
         end
@@ -132,7 +132,7 @@ for j=0,-maxDepth,-3 do
             lps.gotoPose(i%2*maxX, j, i)
         end
     elseif j % 12 == 3 then
-        for i=maxX-1,0,-1 do
+        for i=maxX,0,-1 do
             lps.gotoPose(i, j, i%2*maxZ)
             lps.gotoPose(i, j, (i+1)%2*maxZ)
         end

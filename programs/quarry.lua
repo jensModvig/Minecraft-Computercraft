@@ -114,7 +114,7 @@ local function mine()
   unloadIfNecessary()
 end
 local maxDepth = 255
-for j=maxDepth,0,-3 do
+for j=0,-maxDepth,-3 do
     if j % 12 == 0 then
         for i=0,params.z-1 do
             lps.gotoPose(i%2*params.x, j, i)

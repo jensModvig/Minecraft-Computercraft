@@ -1,1 +1,5 @@
 /data
+#We cant download a file with the same name as the scripts currently downloading
+startup/syncWithGit.lua
+programs/gitget.lua
+json.lua

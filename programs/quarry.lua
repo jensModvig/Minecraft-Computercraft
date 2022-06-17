@@ -117,34 +117,31 @@ local maxX, maxZ = params.x-1, params.z-1
 local start, finish, increment, func
 local maxDepth = 255
 for j=0,-maxDepth,-3 do
-    local remainder = j % 12
-    if remainder == 0 or remainder == 6 then
+    local r = j % 12
+
+    if r == 0 or r == 6 then -- travelX
+      thisAxis = maxX
+      otherAxis = maxZ
       func = function(i,j)
-        lps.gotoPose(i%2*maxX, j, i)
-        lps.gotoPose((i+1)%2*maxX, j, i)
+        lps.gotoPose(i%2*thisAxis, j, i)
+        lps.gotoPose((i+1)%2*thisAxis, j, i)
       end
     else
+      thisAxis = maxZ
+      otherAxis = maxX
       func = function(i,j)
-        lps.gotoPose(i, j, (i+1)%2*maxZ)
-        lps.gotoPose(i, j, i%2*maxZ)
+        lps.gotoPose(i, j, (i+1)%2*otherAxis)
+        lps.gotoPose(i, j, i%2*otherAxis)
       end
     end
 
-    if j % 12 == 0 then
-        for i=0,maxZ do
-          func(i,j)
-        end
-    elseif j % 12 == 9 then
-        for i=0,maxX do
-          func(i,j)
-        end
-    elseif j % 12 == 6 then
-        for i=maxZ,0,-1 do
-          func(i,j)
-        end
-    elseif j % 12 == 3 then
-        for i=maxX,0,-1 do
-          func(i,j)
-        end
+    if r == 6 or r == 3 then
+      for i=otherAxis,0,-1 do
+        func(i,j)
+      end
+    else
+      for i=0,otherAxis do
+        func(i,j)
+      end
     end
 end

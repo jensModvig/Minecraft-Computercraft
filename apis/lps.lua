@@ -10,7 +10,7 @@ local dir_map = {
 local lPose = pose.new()
 local onMoveFunc
 
-local function move(ahead, dig, attack, detect, relative, onMove)
+local function move(ahead, dig, attack, detect, relative)
     while not ahead() do
         if detect() and not dig() then
             error("cant mine block")
@@ -40,7 +40,7 @@ local function face(goal)
   if goal%4+1 == lPose.f then
     turnLeft()
   else
-    for i=1,math.abs(goal-(lPose.f%4)) do
+    for i=1,math.abs(goal-lPose.f) do
       turnRight()
     end
   end

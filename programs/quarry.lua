@@ -114,27 +114,37 @@ local function mine()
   unloadIfNecessary()
 end
 local maxX, maxZ = params.x-1, params.z-1
+local start, finish, increment, func
 local maxDepth = 255
 for j=0,-maxDepth,-3 do
+    local remainder = j % 12
+    if remainder == 0 or remainder == 6 then
+      func = function()
+        lps.gotoPose(i%2*maxX, j, i)
+        lps.gotoPose((i+1)%2*maxX, j, i)
+      end
+    else
+      func = function()
+        lps.gotoPose(i, j, (i+1)%2*maxZ)
+        lps.gotoPose(i, j, i%2*maxZ)
+      end
+    end
+
     if j % 12 == 0 then
         for i=0,maxZ do
-            lps.gotoPose(i%2*maxX, j, i)
-            lps.gotoPose((i+1)%2*maxX, j, i)
+          func()
         end
     elseif j % 12 == 9 then
         for i=0,maxX do
-            lps.gotoPose(i, j, (i+1)%2*maxZ)
-            lps.gotoPose(i, j, i%2*maxZ)
+          func()
         end
     elseif j % 12 == 6 then
         for i=maxZ,0,-1 do
-            lps.gotoPose(i%2*maxX, j, i)
-            lps.gotoPose((i+1)%2*maxX, j, i)
+          func()
         end
     elseif j % 12 == 3 then
         for i=maxX,0,-1 do
-            lps.gotoPose(i, j, (i+1)%2*maxZ)
-            lps.gotoPose(i, j, i%2*maxZ)
+          func()
         end
     end
 end

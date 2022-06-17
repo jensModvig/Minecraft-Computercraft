@@ -110,60 +110,37 @@ local function mine()
     turtle.digDown()
     unloadIfNecessary()
   end
-  lps.forward()
   unloadIfNecessary()
 end
+mine()
+lps.regiserOnMove(mine)
+
+
 local maxX, maxZ = params.x-1, params.z-1
-local thisAxis, otherAxis, func
 local maxDepth = 255
+local pattern = params.z % 2 == 0 and 12 or 6
 
-
-
-local pattern = params.x % 2 == 0 and 12 or 6
-
--- we have an even number of blocks, use a 4 point pattern
--- if (params.x % 2 == 0)
-  for j=0,-maxDepth,-3 do
-      local r = j % pattern
-      if r == 0 or r == 6 then -- travelX
-        thisAxis, otherAxis, func = maxX, maxZ, function(i)
-          lps.gotoPose(i%2*thisAxis, j, i)
-          lps.gotoPose((i+1)%2*thisAxis, j, i)
-        end
-      else
-        thisAxis, otherAxis, func = maxZ, maxX, function(i)
-          lps.gotoPose(i, j, (i+1)%2*otherAxis)
-          lps.gotoPose(i, j, i%2*otherAxis)
-        end
+for j=0,-maxDepth,-3 do
+    local r = j % pattern
+    local thisAxis, otherAxis, func
+    if r == 0 or r == 6 then -- travelX
+      thisAxis, otherAxis, func = maxX, maxZ, function(i)
+        lps.gotoPose(i%2*thisAxis, j, i)
+        lps.gotoPose((i+1)%2*thisAxis, j, i)
       end
-      if r == 6 or r == 3 then
-        -- back to start
-        for i=otherAxis,0,-1 do
-          func(i)
-        end
-      else
-        -- away from start
-        for i=0,otherAxis do
-          func(i)
-        end
+    else
+      thisAxis, otherAxis, func = maxZ, maxX, function(i)
+        lps.gotoPose(i, j, (i+1)%2*otherAxis)
+        lps.gotoPose(i, j, i%2*otherAxis)
       end
-  end
--- else
---   -- uneven number of blocks can use 2 point pattern
---   for j=0,-maxDepth,-3 do
---     local r = j % 6
---     if r == 3 then
---       -- back to start
---       for i=maxX,0,-1 do
---         lps.gotoPose(i, j, (i+1)%2*maxZ)
---         lps.gotoPose(i, j, i%2*maxZ)
---       end
---     else
---       -- away from start
---       for i=0,maxZ do
---           lps.gotoPose(i%2*maxX, j, i)
---           lps.gotoPose((i+1)%2*maxX, j, i)
---       end
---     end
---   end
--- end
+    end
+    if r == 6 or r == 3 then
+      for i=otherAxis,0,-1 do
+        func(i)
+      end
+    else
+      for i=0,otherAxis do
+        func(i)
+      end
+    end
+end

@@ -34,7 +34,7 @@ function new(x, y, z, f)
         x = tonumber(x) or 0,
         y = tonumber(y) or 0,
         z = tonumber(z) or 0,
-        f = tonumber(f) or 1
+        f = tonumber(f)
     }, poseMetatable)
 end
 

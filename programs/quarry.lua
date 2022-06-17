@@ -125,22 +125,22 @@ for j=0,-maxDepth,-3 do
     local thisAxis, otherAxis, func
     if r == 0 or r == 6 then -- travelX
       thisAxis, otherAxis, func = maxX, maxZ, function(i)
-        lps.gotoPose(i%2*thisAxis, j, i)
-        lps.gotoPose((i+1)%2*thisAxis, j, i)
+        table.insert(lps.waypoints, pose.new(i%2*thisAxis, j, i));
+        table.insert(lps.waypoints, pose.new((i+1)%2*thisAxis, j, i));
       end
     else
       thisAxis, otherAxis, func = maxZ, maxX, function(i)
-        lps.gotoPose(i, j, (i+1)%2*otherAxis)
-        lps.gotoPose(i, j, i%2*otherAxis)
+        table.insert(lps.waypoints, pose.new(i, j, (i+1)%2*otherAxis));
+        table.insert(lps.waypoints, pose.new(i, j, i%2*otherAxis));
       end
     end
+    local start, finish, incr = 0, otherAxis, 1
     if r == 6 or r == 3 then
-      for i=otherAxis,0,-1 do
-        func(i)
-      end
-    else
-      for i=0,otherAxis do
-        func(i)
-      end
+      start, finish, incr = otherAxis, 0, -1
+    end
+    for i=0,otherAxis do
+      func(i)
     end
 end
+
+lps.navigate(function() print("done") end)

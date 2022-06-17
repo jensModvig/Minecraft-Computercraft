@@ -7,7 +7,7 @@ local dir_map = {
     vector.new(0,0,-1) -- west/left
 }
 
-local lPose = pose.new()
+local lPose = pose.new(0,0,0,1)
 local onMoveFunc
 
 local function move(ahead, dig, attack, detect, relative)
@@ -46,6 +46,7 @@ local function face(goal)
   end
 end
 
+local waypoints = {}
 local function gotoPose(x, y, z, f)
     print("going to:", pose.new(x, y, z, f):tostring())
     function travelAxis(difference, action, facing)
@@ -68,11 +69,22 @@ local function registerOnMove(onMove)
   onMoveFunc = onMove
 end
 
-local function navigate(waypoints, callback)
+local function navigate(callback)
   for _, v in pairs(waypoints) do
     gotoPose(v.x, v.y, v.z, v.f)
   end
   callback()
 end
 
-return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose, registerOnMove = registerOnMove}
+return {
+  forward = forward,
+  up = up,
+  down = down,
+  turnRight = turnRight,
+  turnLeft = turnLeft,
+  face = face,
+  gotoPose = gotoPose,
+  getPose = getPose,
+  registerOnMove = registerOnMove,
+  waypoints=waypoints
+}

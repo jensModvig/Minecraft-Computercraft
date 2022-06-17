@@ -119,12 +119,12 @@ local maxDepth = 255
 for j=0,-maxDepth,-3 do
     local remainder = j % 12
     if remainder == 0 or remainder == 6 then
-      func = function()
+      func = function(i,j)
         lps.gotoPose(i%2*maxX, j, i)
         lps.gotoPose((i+1)%2*maxX, j, i)
       end
     else
-      func = function()
+      func = function(i,j)
         lps.gotoPose(i, j, (i+1)%2*maxZ)
         lps.gotoPose(i, j, i%2*maxZ)
       end
@@ -132,19 +132,19 @@ for j=0,-maxDepth,-3 do
 
     if j % 12 == 0 then
         for i=0,maxZ do
-          func()
+          func(i,j)
         end
     elseif j % 12 == 9 then
         for i=0,maxX do
-          func()
+          func(i,j)
         end
     elseif j % 12 == 6 then
         for i=maxZ,0,-1 do
-          func()
+          func(i,j)
         end
     elseif j % 12 == 3 then
         for i=maxX,0,-1 do
-          func()
+          func(i,j)
         end
     end
 end

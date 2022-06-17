@@ -39,8 +39,8 @@ local function turnLeft() turn(turtle.turnLeft, 2) end
 local function face(goal)
   if goal%4+1 == lPose.f then
     turnLeft()
-  else
-    for i=1,math.abs(goal-lPose.f) do
+  elseif goal ~= lPose.f then
+    for i=1,math.abs(goal-(lPose.f%4)) do
       turnRight()
     end
   end

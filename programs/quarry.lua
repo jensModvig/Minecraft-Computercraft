@@ -1,5 +1,6 @@
 local parser = require("/apis/paramParser")
 local lps = require("/apis/lps")
+local pose = require("/apis/pose")
 
 local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
 

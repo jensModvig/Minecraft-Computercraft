@@ -19,7 +19,7 @@ local Pose = {
         return new(self.x, self.y, self.z, self.f)
     end,
     tostring = function(self)
-        return self.x .. "," .. self.y .. "," .. self.z .. "," .. self.f
+        return self.x .. "," .. self.y .. "," .. self.z .. "," .. (self.f and self.f or "nil") 
     end
 }
 local poseMetatable = {

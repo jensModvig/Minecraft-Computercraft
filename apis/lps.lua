@@ -86,5 +86,6 @@ return {
   gotoPose = gotoPose,
   getPose = getPose,
   registerOnMove = registerOnMove,
+  navigate=navigate
   waypoints=waypoints
 }

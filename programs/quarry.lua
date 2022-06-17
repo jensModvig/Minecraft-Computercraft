@@ -113,7 +113,7 @@ local function mine()
   unloadIfNecessary()
 end
 mine()
-lps.regiserOnMove(mine)
+lps.registerOnMove(mine)
 
 
 local maxX, maxZ = params.x-1, params.z-1

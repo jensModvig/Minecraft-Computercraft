@@ -75,4 +75,4 @@ local function navigate(waypoints, callback)
   callback()
 end
 
-return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose}
+return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose, regiserOnMove = regiserOnMove}

@@ -64,7 +64,7 @@ local function gotoPose(x, y, z, f)
     end
 end
 local function getPose() return lPose:copy() end
-local function regiserOnMove(onMove)
+local function registerOnMove(onMove)
   onMoveFunc = onMove
 end
 
@@ -75,4 +75,4 @@ local function navigate(waypoints, callback)
   callback()
 end
 
-return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose, regiserOnMove = regiserOnMove}
+return { forward = forward, up = up, down = down, turnRight = turnRight, turnLeft = turnLeft, face = face, gotoPose = gotoPose, getPose = getPose, registerOnMove = registerOnMove}

@@ -1,17 +1,29 @@
 
 local json = require("/apis/json")
 
-local dataDir = "/data/programs/"
-local fileName = dataDir .. shell.getRunningProgram()
+local dataDir = "/data/"
 
-fs.makeDir(dataDirper)
+fs.makeDir(dataDir)
 
-function load()
-    return json.decodeFromFile(fileName)
+function calcPath(suggestedPath)
+    if suggestedPath ~= nil then
+        return dataDir..suggestedPath
+    else
+        return dataDir..shell.getRunningProgram()
+    end
 end
 
-function save(options)
-    local file = fs.open(fileName, "w")
+function load(suggestedPath)
+    return json.decodeFromFile(calcPath(suggestedPath))
+end
+
+function save(options, suggestedPath)
+    local file = fs.open(calcPath(suggestedPath), "w")
     file.write(json.encodePretty(options))
-    file.close() -- Remember to call close, otherwise changes may not be written!
+    file.close()
 end
+
+return {
+    load = load,
+    save = save
+}

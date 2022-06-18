@@ -144,4 +144,16 @@ for j=0,-maxDepth,-3 do
     end
 end
 
-lps.navigate(function() print("done") end)
+lps.navigate(
+  function()
+    print("done")
+  end,
+  function(error)
+    goHome()
+    unload()
+    print("we reached bedrock")
+    print("took", os.epoch("utc") - startTime, "milliseconds.")
+    print("and", turtle.getFuelLevel() - startFuel, "fuel.")
+    sleep(10000000)
+  end
+)

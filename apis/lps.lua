@@ -69,11 +69,15 @@ local function registerOnMove(onMove)
   onMoveFunc = onMove
 end
 
-local function navigate(callback)
-  for _, v in pairs(waypoints) do
-    gotoPose(v.x, v.y, v.z, v.f)
+local function navigate(success, error)
+  local status, err = pcall(function()--try
+    for _, v in pairs(waypoints) do
+      gotoPose(v.x, v.y, v.z, v.f)
+    end
+    callback()
+  end ) if not status then-- catch
+    error(err)
   end
-  callback()
 end
 
 return {
@@ -86,6 +90,6 @@ return {
   gotoPose = gotoPose,
   getPose = getPose,
   registerOnMove = registerOnMove,
-  navigate=navigate
+  navigate=navigate,
   waypoints=waypoints
 }

@@ -209,3 +209,11 @@ function decodeFromFile(path)
 	file.close()
 	return decoded
 end
+
+
+return {
+    encode = encode,
+    encodePretty = encodePretty,
+    decode = decode,
+    decodeFromFile = decodeFromFile
+}

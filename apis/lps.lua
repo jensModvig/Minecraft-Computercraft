@@ -50,7 +50,6 @@ end
 
 data.waypoints = {}
 local function gotoPose(x, y, z, f)
-    print("going to:", pose.new(x, y, z, f):tostring())
     function travelAxis(difference, action, facing)
         if difference == 0 then return end
         face(facing)
@@ -62,7 +61,6 @@ local function gotoPose(x, y, z, f)
     travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
     travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
     if (f) then
-      print("requested a facing", f)
       face(f)
     end
 end
@@ -103,11 +101,11 @@ local function calculatePose()
   }
 end
 
-if data then
+if data.waypoints then
     local calc = calculatePose()
-    lPose = pose.new(calc.pose)
+    lPose = pose.new(calc.pose.x, calc.pose.y, calc.pose.z, calc.pose.f)
     local i = 0
-    data.waypoints[1] = pose.new(calc.pose)
+    data.waypoints[1] = pose.new(calc.pose.x, calc.pose.y, calc.pose.z, calc.pose.f)
     while data.waypoints[calc.nxtWaypointIdx + i] do
       data.waypoints[i + 2] = data.waypoints[calc.nxtWaypointIdx + i]
       data.waypoints[calc.nxtWaypointIdx + i] = nil

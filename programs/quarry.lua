@@ -33,9 +33,9 @@ print(string.format("The program is estimated to use %d fuel.", est_fuel_total))
 print(string.format("Turtle will have %d fuel remaining.", turtle.getFuelLevel() - est_fuel_total))
 
 
-local arrayBL = options.load("quarry").blacklist
+local data = options.load("quarry")
 local BL = {}
-for _, entry in ipairs(arrayBL) do
+for _, entry in ipairs(data.blacklist) do
   BL[entry] = true
 end
 
@@ -102,31 +102,35 @@ mine()
 lps.registerOnMove(mine)
 
 
-local maxX, maxZ = params.x-1, params.z-1
-local maxDepth = 255
-local pattern = params.z % 2 == 0 and 12 or 6
+if not data.running then
+    local maxX, maxZ = params.x-1, params.z-1
+    local maxDepth = 255
+    local pattern = params.z % 2 == 0 and 12 or 6
 
-for j=0,-maxDepth,-3 do
-    local r = j % pattern
-    local thisAxis, otherAxis, func
-    if r == 0 or r == 6 then -- travelX
-      thisAxis, otherAxis, func = maxX, maxZ, function(i)
-        table.insert(lps.waypoints, pose.new(i%2*thisAxis, j, i));
-        table.insert(lps.waypoints, pose.new((i+1)%2*thisAxis, j, i));
-      end
-    else
-      thisAxis, otherAxis, func = maxZ, maxX, function(i)
-        table.insert(lps.waypoints, pose.new(i, j, (i+1)%2*otherAxis));
-        table.insert(lps.waypoints, pose.new(i, j, i%2*otherAxis));
-      end
+    for j=0,-maxDepth,-3 do
+        local r = j % pattern
+        local thisAxis, otherAxis, func
+        if r == 0 or r == 6 then -- travelX
+          thisAxis, otherAxis, func = maxX, maxZ, function(i)
+            table.insert(lps.waypoints, pose.new(i%2*thisAxis, j, i));
+            table.insert(lps.waypoints, pose.new((i+1)%2*thisAxis, j, i));
+          end
+        else
+          thisAxis, otherAxis, func = maxZ, maxX, function(i)
+            table.insert(lps.waypoints, pose.new(i, j, (i+1)%2*otherAxis));
+            table.insert(lps.waypoints, pose.new(i, j, i%2*otherAxis));
+          end
+        end
+        local start, finish, incr = 0, otherAxis, 1
+        if r == 6 or r == 3 then
+          start, finish, incr = otherAxis, 0, -1
+        end
+        for i=0,otherAxis do
+          func(i)
+        end
     end
-    local start, finish, incr = 0, otherAxis, 1
-    if r == 6 or r == 3 then
-      start, finish, incr = otherAxis, 0, -1
-    end
-    for i=0,otherAxis do
-      func(i)
-    end
+    data.running = true
+    options.save(data, "quarry")
 end
 
 lps.navigate(

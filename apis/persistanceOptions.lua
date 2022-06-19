@@ -14,7 +14,11 @@ function calcPath(suggestedPath)
 end
 
 function load(suggestedPath)
-    return json.decodeFromFile(calcPath(suggestedPath))
+    suggestedPath = calcPath(suggestedPath)
+    if fs.exists(suggestedPath) and not fs.isDir(suggestedPath) then
+        return json.decodeFromFile(suggestedPath)
+    end
+    return {}
 end
 
 function save(options, suggestedPath)

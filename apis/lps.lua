@@ -1,6 +1,6 @@
 local pose = require("/apis/pose")
 local options = require("/apis/persistanceOptions")
-local data = options.load("lps").
+local data = options.load("lps")
 
 local dir_map = {
     vector.new(1,0,0), -- north/front
@@ -48,7 +48,7 @@ local function face(goal)
   end
 end
 
-local data.waypoints = {}
+data.waypoints = {}
 local function gotoPose(x, y, z, f)
     print("going to:", pose.new(x, y, z, f):tostring())
     function travelAxis(difference, action, facing)
@@ -89,6 +89,7 @@ local function calculatePose()
     ourPose[axis] = ourPose[axis] + math.sign(difference)*stepsMoved
   end
     -- backtrack until we find position and facing
+  local i = 1
   while data.waypoints[i+1] and data.startFuel > fuelLeft do
     local prvW, nxtW = data.waypoints[i-1], data.waypoints[i]
     if travelAxis(prvW.x - nxtW.x, prvW.x < nxtW.x and 3 or 1, "x") or

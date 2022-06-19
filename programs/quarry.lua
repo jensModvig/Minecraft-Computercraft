@@ -3,7 +3,11 @@ local lps = require("/apis/lps")
 local pose = require("/apis/pose")
 local options = require("/apis/persistanceOptions")
 
-local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
+local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {
+  x="REQUIRED",
+  z="REQUIRED",
+  resume=false
+})
 
 local startTime = os.epoch("utc")
 local startFuel = turtle.getFuelLevel()
@@ -102,7 +106,7 @@ mine()
 lps.registerOnMove(mine)
 
 
-if not data.running then
+if not params.resume then
     local maxX, maxZ = params.x-1, params.z-1
     local maxDepth = 255
     local pattern = params.z % 2 == 0 and 12 or 6

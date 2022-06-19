@@ -1,4 +1,6 @@
 local pose = require("/apis/pose")
+local options = require("/apis/persistanceOptions")
+local data = options.load("lps").
 
 local dir_map = {
     vector.new(1,0,0), -- north/front
@@ -69,7 +71,58 @@ local function registerOnMove(onMove)
   onMoveFunc = onMove
 end
 
+function sign(number)
+  return (number > 0 and 1) or (number == 0 and 0) or -1
+end
+
+local function calculatePose()
+  local fuelLeft = data.startFuel
+  local ourPose = pose.new(0, 0, 0, 1)
+
+  function travelAxis(difference, facing, axis)
+    ourPose.f = facing
+    if fuelLeft == turtle.getFuelLevel() then
+      return true
+    end
+    local stepsMoved = math.min(math.abs(difference), fuelLeft - turtle.getFuelLevel())
+    fuelLeft = fuelLeft - stepsMoved
+    ourPose[axis] += math.sign(difference)*stepsMoved
+  end
+    -- backtrack until we find position and facing
+  while waypoints[i+1] and data.startFuel > fuelLeft do
+    local prvW, nxtW = waypoints[i-1], waypoints[i]
+    travelAxis(prvW.x - nxtW.x, prvW.x < nxtW.x and 3 or 1, "x") or
+    travelAxis(prvW.z - nxtW.z, prvW.z < nxtW.z and 4 or 2, "z") or
+    travelAxis(prvW.y - nxtW.y, ourPose.f, "y")
+    i = i + 1
+  end
+  return {
+    pose = ourPose,
+    nxtWaypointIdx = i - 1
+  }
+end
+
+local function init()
+    if data then
+        local calc = calculatePose()
+        lPose = pose.new(calc.pose)
+        local i = 0
+        data.waypoints[1] = pose.new(calc.pose)
+        while data.waypoints[calc.nxtWaypointIdx + i] do
+          data.waypoints[i + 2] = data.waypoints[calc.nxtWaypointIdx + i]
+          data.waypoints[calc.nxtWaypointIdx + i] = nil
+          i = i + 1
+        end
+        data.startFuel = turtle.getFuelLevel()
+        options.save(data, "lps")
+    end
+end
+
+
 local function navigate(success, error)
+  data.startFuel = turtle.getFuelLevel()
+  options.save(data, "lps")
+  data.waypoints
   local status, err = pcall(function()--try
     for _, v in pairs(waypoints) do
       gotoPose(v.x, v.y, v.z, v.f)

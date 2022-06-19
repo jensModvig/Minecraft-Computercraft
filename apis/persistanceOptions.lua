@@ -7,9 +7,9 @@ fs.makeDir(dataDir)
 
 function calcPath(suggestedPath)
     if suggestedPath ~= nil then
-        return dataDir..suggestedPath
+        return dataDir..suggestedPath .. ".json"
     else
-        return dataDir..shell.getRunningProgram()
+        return dataDir..shell.getRunningProgram() .. ".json"
     end
 end
 

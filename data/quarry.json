@@ -1,0 +1,21 @@
+{
+    "blacklist": [
+        "minecraft:stone",
+        "minecraft:granite",
+        "minecraft:andesite",
+        "minecraft:diorite",
+        "minecraft:dirt",
+        "minecraft:gravel",
+        "minecraft:grass_block",
+        "minecraft:cobblestone",
+        "minecraft:crafting_table",
+        "minecraft:oak_planks",
+        "minecraft:netherrack",
+        "minecraft:magma_block",
+        "minecraft:blackstone",
+        "minecraft:soul_sand",
+        "minecraft:soul_soil",
+        "create:limestone",
+        "create:limestone_cobblestone"
+    ]
+}

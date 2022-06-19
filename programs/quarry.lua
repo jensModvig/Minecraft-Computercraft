@@ -1,6 +1,7 @@
 local parser = require("/apis/paramParser")
 local lps = require("/apis/lps")
 local pose = require("/apis/pose")
+local options = require("/apis/persistanceOptions")
 
 local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {x="REQUIRED", z="REQUIRED"})
 
@@ -32,27 +33,11 @@ print(string.format("The program is estimated to use %d fuel.", est_fuel_total))
 print(string.format("Turtle will have %d fuel remaining.", turtle.getFuelLevel() - est_fuel_total))
 
 
--- Blacklist
+local arrayBL = options.load("quarry").blacklist
 local BL = {}
-BL["minecraft:stone"] = true
-BL["minecraft:granite"] = true
-BL["minecraft:andesite"] = true
-BL["minecraft:diorite"] = true
-BL["minecraft:dirt"] = true
-BL["minecraft:gravel"] = true
-BL["minecraft:grass_block"] = true
-BL["minecraft:cobblestone"] = true
-BL["minecraft:crafting_table"] = true
-BL["minecraft:oak_planks"] = true
-
-BL["minecraft:netherrack"] = true
-BL["minecraft:magma_block"] = true
-BL["minecraft:blackstone"] = true
-BL["minecraft:soul_sand"] = true
-BL["minecraft:soul_soil"] = true
-
-BL["create:limestone"] = true
-BL["create:limestone_cobblestone"] = true
+for _, entry in ipairs(arrayBL) do
+  BL[entry] = true
+end
 
 
 local function getEmptySlots()

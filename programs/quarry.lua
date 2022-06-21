@@ -144,6 +144,7 @@ lps.navigate(
     print("done")
   end,
   function(error)
+    print(error)
     goHome()
     unload()
     print("we reached bedrock")

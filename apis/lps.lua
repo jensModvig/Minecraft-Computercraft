@@ -124,7 +124,7 @@ local function navigate(success, error)
     for _, v in pairs(data.waypoints) do
       gotoPose(v.x, v.y, v.z, v.f)
     end
-    callback()
+    success()
   end ) if not status then-- catch
     error(err)
   end

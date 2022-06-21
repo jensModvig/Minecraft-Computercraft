@@ -104,6 +104,7 @@ end
 if data.waypoints then
     local calc = calculatePose()
     lPose = pose.new(calc.pose.x, calc.pose.y, calc.pose.z, calc.pose.f)
+    print("pose calculated to ", lPose:tostring())
     local i = 0
     data.waypoints[1] = pose.new(calc.pose.x, calc.pose.y, calc.pose.z, calc.pose.f)
     while data.waypoints[calc.nxtWaypointIdx + i] do

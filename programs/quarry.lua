@@ -111,6 +111,8 @@ if not params.resume then
     local maxDepth = 255
     local pattern = params.z % 2 == 0 and 12 or 6
 
+    lps.waypoints = {}
+
     for j=0,-maxDepth,-3 do
         local r = j % pattern
         local thisAxis, otherAxis, func

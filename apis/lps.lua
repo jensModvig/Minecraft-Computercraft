@@ -1,12 +1,21 @@
 local pose = require("/apis/pose")
 local mathAddon = require("/apis/mathAddon")
 local options = require("/apis/persistanceOptions")
+local parser = require("/apis/paramParser")
 
 local DATAPATH = "lps"
 
+
+local function parse(input, argOrder, defaults, nameOfCommand)
+
+local params = parser.parse({ ... }, {}, {
+    restart=false
+})
+
 local data = options.load(DATAPATH)
 -- first time setup
-if data.waypoints == nil then
+if data.waypoints == nil or params.restart then
+    print("Restarting LPS coordinate system.")
     data.waypoints = { pose.new(0,0,0,1) }
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)

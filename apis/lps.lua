@@ -1,4 +1,5 @@
 local pose = require("/apis/pose")
+local mathAddon = require("/apis/mathAddon")
 local options = require("/apis/persistanceOptions")
 
 local DATAPATH = "lps"
@@ -70,10 +71,6 @@ local function registerOnMove(onMove)
     onMoveFunc = onMove
 end
 
--- function sign(number)
---   return (number > 0 and 1) or (number == 0 and 0) or -1
--- end
-
 -- Takes the waypoint list to execute and calculates the current pose
 local function calculatePoses()
 
@@ -118,7 +115,7 @@ local function calculatePoses()
         local abs_diff = math.abs(difference)
         local stepsMoved = math.min(abs_diff, moves_left)
         moves_left = moves_left - stepsMoved
-        current_pose[axis] = current_pose[axis] + math.sign(difference)*stepsMoved
+        current_pose[axis] = current_pose[axis] + mathAddon.sign(difference)*stepsMoved
         -- turtle needs to move, but no more fuel left
         if stepsMoved < abs_diff then
             return true

@@ -1,13 +1,13 @@
 local pose = require("/apis/pose")
 local mathAddon = require("/apis/mathAddon")
 local options = require("/apis/persistanceOptions")
-local parser = require("/apis/paramParser")
+-- local parser = require("/apis/paramParser")
 
 local DATAPATH = "lps"
 
-local params = parser.parse({ ... }, {}, {
-    restart=false
-})
+-- local params = parser.parse({ ... }, {}, {
+--     restart=false
+-- })
 
 local data = options.load(DATAPATH)
 -- first time setup

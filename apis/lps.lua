@@ -132,9 +132,9 @@ local function calculatePoses()
     local next_waypoint_idx = nil
     for i = 2, #data.waypoints do
         -- reversed order (yzx) and opposite facing
-        if  travelAxis(current_pose.x - data.waypoints[i].x, current_pose.x < data.waypoints[i].x and 3 or 1, "x") or
-            travelAxis(current_pose.z - data.waypoints[i].z, current_pose.z < data.waypoints[i].z and 4 or 2, "z") or
-            travelAxis(current_pose.y - data.waypoints[i].y, nil, "y") then
+        if  travelAxis(data.waypoints[i].x - current_pose.x, data.waypoints[i].x < current_pose.x and 3 or 1, "x") or
+            travelAxis(data.waypoints[i].z - current_pose.z, data.waypoints[i].z < current_pose.z and 4 or 2, "z") or
+            travelAxis(data.waypoints[i].y - current_pose.y, nil, "y") then
 
             next_waypoint_idx = i
             break

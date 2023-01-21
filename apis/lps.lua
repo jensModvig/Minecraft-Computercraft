@@ -6,7 +6,7 @@ local DATAPATH = "lps"
 local data = options.load(DATAPATH)
 -- first time setup
 if data.waypoints == nil then
-    data.waypoints = { 1 = { x=0, y=0, z=0, f=1} }
+    data.waypoints = { { x=0, y=0, z=0, f=1} }
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)
 end
@@ -174,12 +174,14 @@ if data.waypoints ~= nil then
         startFuel = turtle.getFuelLevel(),
         waypoints = {}
     }
-    lPose = poses[1]
+    lPose = data.poses[1]
 
     -- Remove waypoints before the new pose
     table.insert(waypoint_data.waypoints, lPose)
-    for i = data.idx, #waypoint_data.waypoints do
-        table.insert(waypoint_data.waypoints, lPose)
+    if data.idx ~= nil then
+        for i = data.idx, #waypoint_data.waypoints do
+            table.insert(waypoint_data.waypoints, lPose)
+        end
     end
     data = waypoint_data
 
@@ -191,7 +193,8 @@ local function navigate(success, error)
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)
     local status, err = pcall(function()--try
-        for _, v in pairs(data.waypoints) do
+        for i, v in pairs(data.waypoints) do
+            print("going to idx ", i)
             gotoPose(v.x, v.y, v.z, v.f)
         end
     end ) if not status then-- catch

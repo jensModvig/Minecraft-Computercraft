@@ -165,8 +165,8 @@ if data.waypoints ~= nil then
 
     -- Add waypoints after the new pose
     if data.idx ~= nil then
-        for i = data.idx, #waypoint_data.waypoints do
-            table.insert(waypoint_data.waypoints, lPose)
+        for i = data.idx, #data.waypoints do
+            table.insert(waypoint_data.waypoints, data.waypoints[i])
         end
     end
     data = waypoint_data

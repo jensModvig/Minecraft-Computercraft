@@ -139,6 +139,11 @@ if not params.resume then
     options.save(data, "quarry")
 end
 
+print("the waypoints are")
+for _, v in pairs(data.waypoints) do
+    print(v:tostring())
+end
+
 lps.navigate(
     function()
         print("done")

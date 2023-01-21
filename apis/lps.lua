@@ -61,24 +61,6 @@ end
 local function face(goal) _face(goal, lPose, turnLeft, turnRight) end
 
 
-local function gotoPose(x, y, z, f)
-    print("going to ", x, " ", y, " ", z, " ", f)
-    function travelAxis(difference, action, facing)
-        if difference == 0 then
-            return
-        end
-        face(facing)
-        for i=1,math.abs(difference) do
-            action()
-        end
-    end
-    travelAxis(x - lPose.x, forward, x < lPose.x and 3 or 1)
-    travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
-    travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
-    if (f) then
-        face(f)
-    end
-end
 local function getPose() return lPose:copy() end
 local function registerOnMove(onMove)
     onMoveFunc = onMove
@@ -191,6 +173,25 @@ if data.waypoints ~= nil then
     options.save(data, DATAPATH)
 end
 
+
+local function gotoPose(x, y, z, f)
+    print("going to ", x, " ", y, " ", z, " ", f)
+    function travelAxis(difference, action, facing)
+        if difference == 0 then
+            return
+        end
+        face(facing)
+        for i=1,math.abs(difference) do
+            action()
+        end
+    end
+    travelAxis(x - lPose.x, forward, x < lPose.x and 3 or 1)
+    travelAxis(z - lPose.z, forward, z < lPose.z and 4 or 2)
+    travelAxis(y - lPose.y, y < lPose.y and down or up, lPose.f)
+    if (f) then
+        face(f)
+    end
+end
 
 local function navigate(success, error)
     data.startFuel = turtle.getFuelLevel()

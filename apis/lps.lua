@@ -62,8 +62,11 @@ local function face(goal) _face(goal, lPose, turnLeft, turnRight) end
 
 
 local function gotoPose(x, y, z, f)
+    print("going to ", x, " ", y, " ", z, " ", f)
     function travelAxis(difference, action, facing)
-        if difference == 0 then return end
+        if difference == 0 then
+            return
+        end
         face(facing)
         for i=1,math.abs(difference) do
             action()

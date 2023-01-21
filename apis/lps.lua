@@ -31,21 +31,24 @@ local function forward() return move(turtle.forward, turtle.dig, turtle.attack, 
 local function up() return move(turtle.up, turtle.digUp, turtle.attackUp, turtle.detectUp, vector.new(0,1,0)) end
 local function down() return move(turtle.down, turtle.digDown, turtle.attackDown, turtle.detectDown, vector.new(0,-1,0)) end
 
-local function turn(action, moduloOffset)
+local function turn(action, moduloOffset, pose)
   action()
-  lPose.f = (lPose.f + moduloOffset) % 4 + 1
+  pose.f = (pose.f + moduloOffset) % 4 + 1
 end
-local function turnRight() turn(turtle.turnRight, 0) end
-local function turnLeft() turn(turtle.turnLeft, 2) end
+local function turnRight() turn(turtle.turnRight, 0, lPose) end
+local function turnLeft() turn(turtle.turnLeft, 2, lPose) end
 
-local function face(goal)
-  if goal%4+1 == lPose.f then
-    turnLeft()
-  else
-    for i=1,math.abs(goal-(lPose.f%4))%4 do
-      turnRight()
+local function _face(goal, pose, left_action, right_action)
+    if goal%4+1 == pose.f then
+      left_action()
+    else
+      for i=1,math.abs(goal-(pose.f%4))%4 do
+        right_action()
+      end
     end
-  end
+end
+local function face(goal)
+  return _face(goal, lPose, turnLeft, turnRight)
 end
 
 data.waypoints = {}
@@ -69,39 +72,100 @@ local function registerOnMove(onMove)
   onMoveFunc = onMove
 end
 
-function sign(number)
-  return (number > 0 and 1) or (number == 0 and 0) or -1
-end
+-- function sign(number)
+--   return (number > 0 and 1) or (number == 0 and 0) or -1
+-- end
 
+-- Takes the waypoint list to execute and calculates the current pose
 local function calculatePose()
-  local fuelLeft = data.startFuel
-  local ourPose = pose.new(0, 0, 0, 1)
 
-  function travelAxis(difference, facing, axis)
-    ourPose.f = facing
-    if fuelLeft == turtle.getFuelLevel() then
-      return true
+    if #data.waypoints == 0 then
+        error("LPS file must contain at least one waypoint (current position).")
     end
-    local stepsMoved = math.min(math.abs(difference), fuelLeft - turtle.getFuelLevel())
-    fuelLeft = fuelLeft - stepsMoved
-    ourPose[axis] = ourPose[axis] + math.sign(difference)*stepsMoved
-  end
-    -- backtrack until we find position and facing
-  local i = 1
-  while data.waypoints[i+1] and data.startFuel > fuelLeft do
-    local prvW, nxtW = data.waypoints[i-1], data.waypoints[i]
-    if travelAxis(prvW.x - nxtW.x, prvW.x < nxtW.x and 3 or 1, "x") or
-    travelAxis(prvW.z - nxtW.z, prvW.z < nxtW.z and 4 or 2, "z") or
-    travelAxis(prvW.y - nxtW.y, ourPose.f, "y") then end
-    i = i + 1
-  end
-  return {
-    pose = ourPose,
-    nxtWaypointIdx = i - 1
-  }
+    if data.waypoints[1].f == nil then
+      error("The first waypoint must contain a facing,")
+    end
+
+    -- edge case with only one waypoint
+    if #data.waypoints == 1 then
+        return data.waypoints[1]
+
+    ------ Find the waypoint steps before and after running out of fuel ------------
+    local movesDone = data.startFuel - turtle.getFuelLevel()
+    local to_analyze = []
+    local i = 2
+    while data.waypoints[i] do
+        movesDone = movesDone - data.waypoints[i-1]:get_move_distance(data.waypoints[i])
+        if movesDone <= 0 then
+            if #to_analyze == 0 then
+                to_analyze[1] = data.waypoints[i-1]
+            end
+            to_analyze[#to_analyze+1] = data.waypoints[i]
+
+        if movesDone < 0 then
+            break
+
+        i = i + 1
+    end
+
+    
+    -----  Calculate the exact pose ---------
+    local possible_facings = {}
+    local current_pose = to_analyze[#to_analyze+1]
+
+    local function log_facing()
+        possible_facings[current_pose.f] = true
+    end
+    -- turnRight and turnLeft logs the facing before the turn.
+    local function turnRight() turn(log_facing, 0, current_pose) end
+    local function turnLeft() turn(log_facing, 2, current_pose) end
+    local function face(goal)
+      return _face(goal, current_pose, turnLeft, turnRight)
+    end
+
+    function travelAxis(difference, facing, axis)
+        if difference == 0 then
+          return
+        end
+        if facing ~= nil then
+            if movesDone == 0 then
+                face(facing)
+            else
+              current_pose.f = facing % 4 + 1
+            end
+        end
+        -- We are done, turtle needs to move, but no more fuel used
+        if movesDone == 0 then
+          return true
+        end
+        local stepsMoved = math.min(math.abs(difference), -movesDone)
+        movesDone = movesDone + stepsMoved
+        current_pose[axis] = current_pose[axis] + math.sign(difference)*stepsMoved
+    end
+
+    for i = #to_analyze, 2, -1 do
+        local prvevious_waypoint, this_waypoint = to_analyze[i-1], to_analyze[i]
+        if movesDone == 0 then
+        
+        -- reversed order (yzx) and opposite facing
+        if  travelAxis(prvevious_waypoint.y - this_waypoint.y, nil, "y") or
+            travelAxis(prvevious_waypoint.z - this_waypoint.z, prvevious_waypoint.z < this_waypoint.z and 2 or 4, "z") or
+            travelAxis(prvevious_waypoint.x - this_waypoint.x, prvevious_waypoint.x < this_waypoint.x and 1 or 3, "x") then
+          break
+        end
+    end
+    -- log the facing after the turn
+    possible_facings[current_pose.f] = true
+
+    local possible_poses = {}
+    for i = 1, 4 do
+      if possible_facings[i] ~= nil
+          possible_poses[#possible_poses+1] = Pose(current_pose.x, current_pose.y, current_pose.z, i)
+    end
+    return possible_poses
 end
 
-if data.waypoints then
+if data.waypoints ~= nil then
     local calc = calculatePose()
     lPose = pose.new(calc.pose.x, calc.pose.y, calc.pose.z, calc.pose.f)
     print("pose calculated to ", lPose:tostring())

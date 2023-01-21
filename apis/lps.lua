@@ -2,6 +2,8 @@ local pose = require("/apis/pose")
 local options = require("/apis/persistanceOptions")
 local data = options.load("lps")
 
+print("lps version 1")
+
 local dir_map = {
     vector.new(1,0,0), -- north/front
     vector.new(0,0,1), -- east/right

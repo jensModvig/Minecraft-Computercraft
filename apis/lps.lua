@@ -148,7 +148,7 @@ local function calculatePoses()
         possible_poses[#possible_poses+1] = pose.new(current_pose.x, current_pose.y, current_pose.z, i)
     end
     return {
-        idx = next_waypoint_idx
+        idx = next_waypoint_idx,
         poses = possible_poses
     }
 end

@@ -140,7 +140,7 @@ if not params.resume then
 end
 
 print("the waypoints are")
-for _, v in pairs(data.waypoints) do
+for _, v in pairs(lps.waypoints) do
     print(v:tostring())
 end
 

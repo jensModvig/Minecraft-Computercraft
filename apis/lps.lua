@@ -196,6 +196,12 @@ end
 local function navigate(success, error)
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)
+    print("the waypoints in lps are")
+    sleep(5)
+    for _, v in pairs(data.waypoints) do
+        print(v:tostring())
+    end
+
     local status, err = pcall(function()--try
         for i, v in pairs(data.waypoints) do
             print("going to idx ", i)

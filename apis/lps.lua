@@ -1,6 +1,15 @@
 local pose = require("/apis/pose")
 local options = require("/apis/persistanceOptions")
-local data = options.load("lps")
+
+local DATAPATH = "lps"
+
+local data = options.load(DATAPATH)
+-- first time setup
+if data.waypoints == nil then
+    data.waypoints = { 1 = { x=0, y=0, z=0, f=1} }
+    data.startFuel = turtle.getFuelLevel()
+    options.save(data, DATAPATH)
+end
 
 print("lps version 1")
 
@@ -26,7 +35,7 @@ local function move(ahead, dig, attack, detect, relative)
     end
     lPose = lPose:add(dir_map[lPose.f]:mul(relative.x)):add(vector.new(0,relative.y,0))
     if (onMoveFunc) then
-    onMoveFunc()
+        onMoveFunc()
     end
 end
 local function forward() return move(turtle.forward, turtle.dig, turtle.attack, turtle.detect, vector.new(1,0,0)) end
@@ -51,7 +60,7 @@ local function _face(goal, pose, left_action, right_action)
 end
 local function face(goal) _face(goal, lPose, turnLeft, turnRight) end
 
-data.waypoints = {}
+
 local function gotoPose(x, y, z, f)
     function travelAxis(difference, action, facing)
         if difference == 0 then return end
@@ -144,8 +153,9 @@ local function calculatePoses()
 
     local possible_poses = {}
     for i = 1, 4 do
-    if possible_facings[i] ~= nil then
-        possible_poses[#possible_poses+1] = pose.new(current_pose.x, current_pose.y, current_pose.z, i)
+        if possible_facings[i] ~= nil then
+            possible_poses[#possible_poses+1] = pose.new(current_pose.x, current_pose.y, current_pose.z, i)
+        end
     end
     return {
         idx = next_waypoint_idx,
@@ -173,13 +183,13 @@ if data.waypoints ~= nil then
     end
     data = waypoint_data
 
-    options.save(data, "lps")
+    options.save(data, DATAPATH)
 end
 
 
 local function navigate(success, error)
     data.startFuel = turtle.getFuelLevel()
-    options.save(data, "lps")
+    options.save(data, DATAPATH)
     local status, err = pcall(function()--try
         for _, v in pairs(data.waypoints) do
             gotoPose(v.x, v.y, v.z, v.f)

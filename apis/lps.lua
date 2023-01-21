@@ -156,13 +156,13 @@ local function calculatePoses()
 end
 
 if data.waypoints ~= nil then
-    local data = calculatePoses()
-    print("found ", #data.poses, " possible poses, they are:")
-    for _, pose in ipairs(data.poses) do
+    local pose_info = calculatePoses()
+    print("found ", #pose_info.poses, " possible poses, they are:")
+    for _, pose in ipairs(pose_info.poses) do
         print(pose:tostring())
     end
     
-    lPose = data.poses[1]
+    lPose = pose_info.poses[1]
 
     local waypoint_data = {
         startFuel = turtle.getFuelLevel(),
@@ -170,8 +170,8 @@ if data.waypoints ~= nil then
     }
 
     -- Add waypoints after the new pose
-    if data.idx ~= nil then
-        for i = data.idx, #data.waypoints do
+    if pose_info.idx ~= nil then
+        for i = pose_info.idx, #data.waypoints do
             table.insert(waypoint_data.waypoints, data.waypoints[i])
         end
     end

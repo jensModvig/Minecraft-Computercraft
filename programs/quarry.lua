@@ -8,6 +8,7 @@ local params = parser.parse({ ... }, {{"x", "z"}, {"z"}}, {
     z="REQUIRED",
     resume=false
 })
+print("quarry version 1.0")
 
 local startTime = os.epoch("utc")
 local startFuel = turtle.getFuelLevel()

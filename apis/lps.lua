@@ -10,8 +10,8 @@ if data.waypoints == nil then
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)
 else
-    for i, pose in ipairs(data.waypoints) do
-        data.waypoints[i] = pose.new(pose.x, pose.y, pose.z, pose.f)
+    for i, waypoint in ipairs(data.waypoints) do
+        data.waypoints[i] = pose.new(waypoint.x, waypoint.y, waypoint.z, waypoint.f)
     end
 end
 

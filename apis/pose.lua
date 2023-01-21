@@ -1,3 +1,5 @@
+
+-- A pose consists of x,y,z coordinate and an optional direction.
 local Pose = {
     add = function(self, o)
         return new(
@@ -20,6 +22,9 @@ local Pose = {
     end,
     tostring = function(self)
         return self.x .. "," .. self.y .. "," .. self.z .. "," .. (self.f and self.f or "nil") 
+    end,
+    move_distance = function(self, o)
+        return math.abs(self.x - o.x) + math.abs(self.y - o.y) + math.abs(self.z - o.z)
     end
 }
 local poseMetatable = {

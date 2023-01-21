@@ -143,7 +143,7 @@ local function calculatePoses()
     local possible_poses = {}
     for i = 1, 4 do
     if possible_facings[i] ~= nil
-        possible_poses[#possible_poses+1] = Pose(current_pose.x, current_pose.y, current_pose.z, i)
+        possible_poses[#possible_poses+1] = pose.new(current_pose.x, current_pose.y, current_pose.z, i)
     end
     return {
         idx = next_waypoint_idx

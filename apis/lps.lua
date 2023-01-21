@@ -5,9 +5,6 @@ local parser = require("/apis/paramParser")
 
 local DATAPATH = "lps"
 
-
-local function parse(input, argOrder, defaults, nameOfCommand)
-
 local params = parser.parse({ ... }, {}, {
     restart=false
 })

@@ -6,9 +6,13 @@ local DATAPATH = "lps"
 local data = options.load(DATAPATH)
 -- first time setup
 if data.waypoints == nil then
-    data.waypoints = { { x=0, y=0, z=0, f=1} }
+    data.waypoints = { pose.new(0,0,0,1) }
     data.startFuel = turtle.getFuelLevel()
     options.save(data, DATAPATH)
+else
+    for i, pose in ipairs(data.waypoints) do
+        data.waypoints[i] = pose.new(pose.x, pose.y, pose.z, pose.f)
+    end
 end
 
 print("lps version 1")
@@ -155,14 +159,14 @@ if data.waypoints ~= nil then
         print(pose:tostring())
     end
     
-    local waypoint_data = {
-        startFuel = turtle.getFuelLevel(),
-        waypoints = {}
-    }
     lPose = data.poses[1]
 
-    -- Remove waypoints before the new pose
-    table.insert(waypoint_data.waypoints, lPose)
+    local waypoint_data = {
+        startFuel = turtle.getFuelLevel(),
+        waypoints = { lPose }
+    }
+
+    -- Add waypoints after the new pose
     if data.idx ~= nil then
         for i = data.idx, #waypoint_data.waypoints do
             table.insert(waypoint_data.waypoints, lPose)

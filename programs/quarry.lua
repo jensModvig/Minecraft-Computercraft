@@ -161,6 +161,6 @@ lps.navigate(
 
         local p = poses[1]
         -- Go to the surface
-        gotoPose(p.x, 0, v.z, nil)
+        lps.gotoPose(p.x, 0, p.z, nil)
     end
 )

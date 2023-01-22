@@ -158,6 +158,7 @@ lps.navigate(
         for _, pose in ipairs(poses) do
             print(pose:tostring())
         end
+        print("Returning back to surface.")
 
         local p = poses[1]
         -- Go to the surface

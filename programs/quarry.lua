@@ -154,8 +154,8 @@ lps.navigate(
     end,
     -- Desync Error
     function(poses)
-        print("found ", #pose_info.poses, " possible poses, they are:")
-        for _, pose in ipairs(pose_info.poses) do
+        print("found ", #poses, " possible poses, they are:")
+        for _, pose in ipairs(poses) do
             print(pose:tostring())
         end
 

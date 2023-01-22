@@ -159,10 +159,8 @@ local function clean_waypoint_file(pose, nxtWaypointIdx)
     local waypoints = { pose }
     
     -- Add waypoints after the new pose
-    if pose_info.idx ~= nil then
-        for i = pose_info.idx, #data.waypoints do
-            table.insert(waypoints, data.waypoints[i])
-        end
+    for i = nxtWaypointIdx, #data.waypoints do
+        table.insert(waypoints, data.waypoints[i])
     end
     data.startFuel = turtle.getFuelLevel()
     data.waypoints = waypoints
@@ -198,7 +196,9 @@ local function navigate(success, movementError, desyncError)
         return
     end
     lPose = pose_info.poses[1]
-    clean_waypoint_file(pose_info.poses[1], pose_info.idx)
+    if pose_info.idx ~= nil then
+        clean_waypoint_file(pose_info.poses[1], pose_info.idx)
+    end
 
     local status, err = pcall(function()--try
         for i, v in pairs(data.waypoints) do

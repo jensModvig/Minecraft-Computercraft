@@ -116,13 +116,13 @@ if not params.resume then
         local thisAxis, otherAxis, func
         if r == 0 or r == 6 then -- travelX
             thisAxis, otherAxis, func = maxX, maxZ, function(i)
-                table.insert(lps.waypoints, pose.new(i%2*thisAxis, j, i));
-                table.insert(lps.waypoints, pose.new((i+1)%2*thisAxis, j, i));
+                table.insert(lps.data.waypoints, pose.new(i%2*thisAxis, j, i));
+                table.insert(lps.data.waypoints, pose.new((i+1)%2*thisAxis, j, i));
             end
         else
             thisAxis, otherAxis, func = maxZ, maxX, function(i)
-                table.insert(lps.waypoints, pose.new(i, j, (i+1)%2*otherAxis));
-                table.insert(lps.waypoints, pose.new(i, j, i%2*otherAxis));
+                table.insert(lps.data.waypoints, pose.new(i, j, (i+1)%2*otherAxis));
+                table.insert(lps.data.waypoints, pose.new(i, j, i%2*otherAxis));
             end
         end
         local start, finish, incr = 0, otherAxis, 1
@@ -138,7 +138,7 @@ if not params.resume then
 end
 
 print("the waypoints are")
-for _, v in pairs(lps.waypoints) do
+for _, v in pairs(lps.data.waypoints) do
     print(v:tostring())
 end
 

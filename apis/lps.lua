@@ -155,27 +155,17 @@ local function calculatePoses()
     }
 end
 
-if data.waypoints ~= nil then
-    local pose_info = calculatePoses()
-    print("found ", #pose_info.poses, " possible poses, they are:")
-    for _, pose in ipairs(pose_info.poses) do
-        print(pose:tostring())
-    end
+local function clean_waypoint_file(pose, nxtWaypointIdx)
+    local waypoints = { pose }
     
-    lPose = pose_info.poses[1]
-
-    local waypoint_data = {
-        startFuel = turtle.getFuelLevel(),
-        waypoints = { lPose }
-    }
-
     -- Add waypoints after the new pose
     if pose_info.idx ~= nil then
         for i = pose_info.idx, #data.waypoints do
-            table.insert(waypoint_data.waypoints, data.waypoints[i])
+            table.insert(waypoints, data.waypoints[i])
         end
     end
-    data = waypoint_data
+    data.startFuel = turtle.getFuelLevel()
+    data.waypoints = waypoints
 
     options.save(data, DATAPATH)
 end
@@ -200,22 +190,24 @@ local function gotoPose(x, y, z, f)
     end
 end
 
-local function navigate(success, error)
-    data.startFuel = turtle.getFuelLevel()
-    options.save(data, DATAPATH)
-    print("the waypoints in lps are")
-    sleep(5)
-    for _, v in pairs(data.waypoints) do
-        print(v:tostring())
+local function navigate(success, movementError, desyncError)
+    local pose_info = calculatePoses()
+
+    if #pose_info.poses ~= 1 then
+        desyncError(pose_info.poses)
+        return
     end
+    lPose = pose_info.poses[1]
+    clean_waypoint_file(pose_info.poses[1], pose_info.idx)
 
     local status, err = pcall(function()--try
         for i, v in pairs(data.waypoints) do
-            print("going to idx ", i)
             gotoPose(v.x, v.y, v.z, v.f)
         end
     end ) if not status then-- catch
-        error(err)
+        -- Could not move for some reson
+        movementError(err)
+        return
     end
     success()
 end
@@ -231,5 +223,5 @@ return {
     getPose = getPose,
     registerOnMove = registerOnMove,
     navigate=navigate,
-    waypoints=data.waypoints
+    data=data
 }

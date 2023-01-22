@@ -146,6 +146,7 @@ lps.navigate(
     function()
         print("done")
     end,
+    -- Movement Error
     function(error)
         print(error)
         goHome()
@@ -154,5 +155,16 @@ lps.navigate(
         print("took", os.epoch("utc") - startTime, "milliseconds.")
         print("and", turtle.getFuelLevel() - startFuel, "fuel.")
         sleep(10000000)
+    end,
+    -- Desync Error
+    function(poses)
+        print("found ", #pose_info.poses, " possible poses, they are:")
+        for _, pose in ipairs(pose_info.poses) do
+            print(pose:tostring())
+        end
+
+        local p = poses[1]
+        -- Go to the surface
+        gotoPose(p.x, 0, v.z, nil)
     end
 )

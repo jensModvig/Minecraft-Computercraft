@@ -170,7 +170,6 @@ end
 
 
 local function gotoPose(x, y, z, f)
-    print("going to ", x, " ", y, " ", z, " ", f)
     function travelAxis(difference, action, facing)
         if difference == 0 then
             return
@@ -191,11 +190,11 @@ end
 local function navigate(success, movementError, desyncError)
     local pose_info = calculatePoses()
 
+    lPose = pose_info.poses[1]
     if #pose_info.poses ~= 1 then
         desyncError(pose_info.poses)
         return
     end
-    lPose = pose_info.poses[1]
     if pose_info.idx ~= nil then
         clean_waypoint_file(pose_info.poses[1], pose_info.idx)
     end
